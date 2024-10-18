@@ -39,7 +39,11 @@ export const BrandProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
 
       try {
-        const response = await axios.get('https://gtrbicycle.qa/api/shop/v1/product_brands');
+        const response = await axios.get('https://gtrbicycle.qa/api/shop/v1/product_brands', {
+          params: {
+            limit: 1000,
+          },
+        });
         setBrands(response.data.data.items);
       } catch (err) {
         setError('Failed to fetch brands');

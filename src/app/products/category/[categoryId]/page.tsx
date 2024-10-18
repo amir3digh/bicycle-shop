@@ -1,6 +1,4 @@
 'use client';
-
-import { useProductsList } from 'Hooks';
 import { ProductList, SearchInput, SideBarDerawer, SidebarContent } from 'Components';
 
 interface Props {

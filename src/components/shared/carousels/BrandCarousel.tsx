@@ -1,10 +1,10 @@
 'use client';
 import Image from 'next/image';
-import { useBrandsList } from 'Hooks';
 import { useEffect, useState, useRef } from 'react';
+import { useBrandContext } from '@/src/context';
 
 export const BrandCarousel = () => {
-  const { brands } = useBrandsList();
+  const { brands } = useBrandContext();
   const defaultImage = '/images/default-image-bicycle.jpeg';
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerSlide, setItemsPerSlide] = useState(5); // Default to 5 items per slide for larger screens
@@ -14,8 +14,7 @@ export const BrandCarousel = () => {
   const updateItemsPerSlide = () => {
     if (window.innerWidth < 640) {
       setItemsPerSlide(2);
-    }
-    else if (window.innerWidth < 768) {
+    } else if (window.innerWidth < 768) {
       setItemsPerSlide(3);
     } else {
       setItemsPerSlide(5);
@@ -25,7 +24,7 @@ export const BrandCarousel = () => {
   useEffect(() => {
     updateItemsPerSlide();
     window.addEventListener('resize', updateItemsPerSlide);
-    
+
     startAutoPlay();
 
     return () => {
@@ -36,9 +35,7 @@ export const BrandCarousel = () => {
 
   const startAutoPlay = () => {
     intervalRef.current = window.setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === totalSlides - 1 ? 0 : prevIndex + 1
-      );
+      setCurrentIndex((prevIndex) => (prevIndex === totalSlides - 1 ? 0 : prevIndex + 1));
     }, 3000);
   };
 
@@ -50,17 +47,13 @@ export const BrandCarousel = () => {
 
   const handlePrev = () => {
     stopAutoPlay();
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? totalSlides - 1 : prevIndex - 1
-    );
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? totalSlides - 1 : prevIndex - 1));
     startAutoPlay();
   };
 
   const handleNext = () => {
     stopAutoPlay();
-    setCurrentIndex((prevIndex) =>
-      prevIndex === totalSlides - 1 ? 0 : prevIndex + 1
-    );
+    setCurrentIndex((prevIndex) => (prevIndex === totalSlides - 1 ? 0 : prevIndex + 1));
     startAutoPlay();
   };
 
@@ -78,20 +71,14 @@ export const BrandCarousel = () => {
             className="w-full flex-shrink-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
           >
             {brands
-              .slice(
-                slideIndex * itemsPerSlide,
-                slideIndex * itemsPerSlide + itemsPerSlide
-              )
+              .slice(slideIndex * itemsPerSlide, slideIndex * itemsPerSlide + itemsPerSlide)
               .map((brand, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center justify-center"
-                >
+                <div key={index} className="flex flex-col items-center justify-center">
                   <div className="w-24 h-24 relative flex items-center justify-center">
                     <img
                       src={brand.image || defaultImage}
                       alt={brand.title}
-                      className='bg-cover rounded-lg'
+                      className="bg-cover rounded-lg"
                     />
                   </div>
                   <p className="mt-2 text-center text-base sm:text-md font-medium">{brand.title}</p>

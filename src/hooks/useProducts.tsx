@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -19,7 +19,9 @@ export const useProductsList = (
   initialPage: number = 1,
   searchCategoryId?: number,
   searchQuery?: string,
-  selectedBrand?: number // Added selectedBrand for brand filtering
+  selectedBrand?: number, // Added selectedBrand for brand filtering
+  minPrice?: number,
+  maxPrice?: number
 ): ProductsList => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,8 +42,9 @@ export const useProductsList = (
           params: {
             page,
             search_category: searchCategoryId,
-            search_title: searchQuery,
-            search_brand: selectedBrand, // Added the search_brand parameter for brand filtering
+            search_title: searchQuery || undefined,
+            search_brand: selectedBrand || undefined, // Added the search_brand parameter for brand filtering
+            search_price_range: minPrice || maxPrice ? `${minPrice}^${maxPrice}` : undefined,
           },
         });
         setProducts(response.data.data.items);
@@ -57,12 +60,10 @@ export const useProductsList = (
     };
 
     fetchData();
-  }, [page, searchCategoryId, searchQuery, selectedBrand]); // Added selectedBrand to the dependency array
+  }, [page, searchCategoryId, searchQuery, selectedBrand, minPrice, maxPrice]); // Added selectedBrand to the dependency array
 
   return { products, loading, error, pagination, setPage };
 };
-
-
 
 export const useProductDetail = (id: number) => {
   const [product, setProduct] = useState<Product | null>(null);
